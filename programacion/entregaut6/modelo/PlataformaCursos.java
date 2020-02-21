@@ -66,14 +66,14 @@ public class PlataformaCursos
      *
      */
     public int totalCursosEn(String categoria) {
-        int total = -1;
+        
 
         if(plataforma.containsKey(categoria.toUpperCase()))
         {
-            total = plataforma.get(categoria.toUpperCase()).size();   
+            return plataforma.get(categoria.toUpperCase()).size();   
         }
 
-        return total;
+         return -1;
     }
 
     /**
@@ -187,36 +187,6 @@ public class PlataformaCursos
                 indice++;
             }
         }
-
-        
-        // for(String clave : claves){
-        // if(clave.equalsIgnoreCase(categoria))
-        // {
-
-        // for(Curso curso : plataforma.get(clave.toUpperCase()))
-        // {
-
-        // tree.add(curso.getNombre()); 
-        // }
-        // }
-
-        // }
-        // plataforma.remove(categoria.toUpperCase());
-
-        // for(String clave : claves){
-            
-        // for(Curso curso : plataforma.get(clave.toUpperCase()))
-        // {
-        // if(curso.getNivel().equals(nivel))
-        // {   
-        // tree.add(curso.getNombre());
-
-        // }
-        // }   
-        // for (String cur : tree){
-        // plataforma.remove(clave, cur);
-        // }
-        // }
 
         return tree;
     }
