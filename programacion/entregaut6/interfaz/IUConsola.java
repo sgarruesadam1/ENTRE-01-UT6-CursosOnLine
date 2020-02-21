@@ -2,9 +2,11 @@
  * Interfaz de texto
  *  
  */
+package programacion.entregaut6.interfaz;
 import java.util.Scanner;
 import java.util.TreeSet;
-
+import programacion.entregaut6.modelo.PlataformaCursos;
+import programacion.entregaut6.modelo.Nivel;
 public class IUConsola
 {
 

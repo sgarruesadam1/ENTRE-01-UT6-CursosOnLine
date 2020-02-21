@@ -1,3 +1,5 @@
+
+package programacion.entregaut6.modelo;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,15 +48,15 @@ public class PlataformaCursos
      *  
      */
     public void addCurso(String categoria, Curso curso) {
-         ArrayList<Curso> array = new ArrayList<>();
-        
-         if(!plataforma.containsKey(categoria.toUpperCase())){ 
-             array.add(curso);
-             plataforma.put(categoria.toUpperCase(), array);
-          }
-         else{
-             plataforma.get(categoria.toUpperCase()).add(curso);
-          }
+        ArrayList<Curso> array = new ArrayList<>();
+
+        if(!plataforma.containsKey(categoria.toUpperCase())){ 
+            array.add(curso);
+            plataforma.put(categoria.toUpperCase(), array);
+        }
+        else{
+            plataforma.get(categoria.toUpperCase()).add(curso);
+        }
 
     }
 
@@ -65,12 +67,12 @@ public class PlataformaCursos
      */
     public int totalCursosEn(String categoria) {
         int total = -1;
-        
+
         if(plataforma.containsKey(categoria.toUpperCase()))
         {
-         total = plataforma.get(categoria.toUpperCase()).size();   
+            total = plataforma.get(categoria.toUpperCase()).size();   
         }
-     
+
         return total;
     }
 
@@ -86,22 +88,18 @@ public class PlataformaCursos
     public String toString() {
         StringBuilder sb = new StringBuilder();
         Set<String> keys = plataforma.keySet();
-        
-        
+
         for(String clave : keys){
             sb.append(clave + " (" + totalCursosEn(clave) + ")\n");
-            
+
             for(Curso curso : plataforma.get(clave.toUpperCase()))
             {
-            sb.append(curso.toString() + "\n\n");
-          }
+                sb.append(curso.toString() + "\n\n");
+            }
         }
-       
-         
+
         return sb.toString();
-
     }
-
     /**
      * Mostrar la plataforma
      */
@@ -119,7 +117,7 @@ public class PlataformaCursos
     public void leerDeFichero() {
 
         Scanner sc = new Scanner(
-                        this.getClass().getResourceAsStream("/cursos.csv"));
+                this.getClass().getResourceAsStream("/cursos.csv"));
         while (sc.hasNextLine())  {
             String lineaCurso = sc.nextLine().trim();
             int p = lineaCurso.indexOf(SEPARADOR);
@@ -142,10 +140,10 @@ public class PlataformaCursos
      */
     public Curso obtenerCurso(String lineaCurso) {
         String[] str = lineaCurso.trim().split(SEPARADOR);
-        
+
         LocalDate localDate1 = LocalDate.parse(str[1].trim(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         Curso curso = new Curso(str[0].trim(), localDate1, Nivel.valueOf(str[2].toUpperCase().trim()));
-         
+
         return curso;
 
     }
@@ -157,12 +155,12 @@ public class PlataformaCursos
     public TreeSet<String> obtenerCategorias() {
         TreeSet<String> tree = new TreeSet<>();
         Set<String> claves = plataforma.keySet();
-        
+
         for(String key : claves)
         {
             tree.add(key);
         }
-        
+
         return tree;
 
     }
@@ -177,64 +175,72 @@ public class PlataformaCursos
 
     public   TreeSet<String>   borrarCursosDe(String categoria, Nivel nivel) {
         TreeSet<String> tree = new TreeSet<>();
-        Set<String> claves = plataforma.keySet();
-        
-        for(String clave : claves){
-            if(clave.equalsIgnoreCase(categoria))
-            {
-            
-            for(Curso curso : plataforma.get(clave.toUpperCase()))
-            {
-            
-            
-                tree.add(curso.getNombre()); 
-                plataforma.get(clave).remove(curso);
+        categoria = categoria.toUpperCase();
+        int indice = 0;
+        while (indice < plataforma.get(categoria).size()) {
+            Curso e = plataforma.get(categoria).get(indice);
+            if (e.getNivel().equals(nivel)){
+                tree.add(e.getNombre());
+                plataforma.get(categoria).remove(indice);
             }
-          }
-          
-        }
-        
-        
-                
-        for(String clave : claves){
-            
-            
-            for(Curso curso : plataforma.get(clave.toUpperCase()))
-            {
-            if(curso.getNivel().compareTo(nivel) > 0)
-            {   
-                tree.add(curso.getNombre());
-                plataforma.get(clave).remove(curso);
+            else {
+                indice++;
             }
-          }
         }
-          
+
+        
+        // for(String clave : claves){
+        // if(clave.equalsIgnoreCase(categoria))
+        // {
+
+        // for(Curso curso : plataforma.get(clave.toUpperCase()))
+        // {
+
+        // tree.add(curso.getNombre()); 
+        // }
+        // }
+
+        // }
+        // plataforma.remove(categoria.toUpperCase());
+
+        // for(String clave : claves){
+            
+        // for(Curso curso : plataforma.get(clave.toUpperCase()))
+        // {
+        // if(curso.getNivel().equals(nivel))
+        // {   
+        // tree.add(curso.getNombre());
+
+        // }
+        // }   
+        // for (String cur : tree){
+        // plataforma.remove(clave, cur);
+        // }
+        // }
+
         return tree;
-
     }
-
     /**
-      *   Devuelve el nombre del curso más antiguo en la
-      *   plataforma (el primero publicado)
-      */
+     *   Devuelve el nombre del curso más antiguo en la
+     *   plataforma (el primero publicado)
+     */
 
     public String cursoMasAntiguo() {
         String antiguo = "";
-         LocalDate fecha = LocalDate.now();
-        
+        LocalDate fecha = LocalDate.now();
+
         Set<String> keys = plataforma.keySet();
-                
+
         for(String clave : keys){
-            
-            
+
             for(Curso curso : plataforma.get(clave.toUpperCase()))
             {
-            if(fecha.compareTo(curso.getFecha()) > 0)
-            {
-                fecha = curso.getFecha();
-                antiguo = curso.getNombre();
+                if(fecha.compareTo(curso.getFecha()) > 0)
+                {
+                    fecha = curso.getFecha();
+                    antiguo = curso.getNombre();
+                }
             }
-          }
         }
 
         return antiguo;
@@ -250,30 +256,30 @@ public class PlataformaCursos
         plataforma.escribir();
 
         System.out.println(
-                        "Curso más antiguo: " + plataforma.cursoMasAntiguo()
-                                        + "\n");
+            "Curso más antiguo: " + plataforma.cursoMasAntiguo()
+            + "\n");
 
         String categoria = "bases de datos";
         Nivel nivel = Nivel.AVANZADO;
         System.out.println("------------------");
         System.out.println(
-                        "Borrando cursos de " + categoria.toUpperCase()
-                                        + " y nivel "
-                                        + nivel);
+            "Borrando cursos de " + categoria.toUpperCase()
+            + " y nivel "
+            + nivel);
         TreeSet<String> borrados = plataforma.borrarCursosDe(categoria, nivel);
 
         System.out.println("Borrados " + " = " + borrados.toString() + "\n");
         categoria = "cms";
         nivel = Nivel.INTERMEDIO;
         System.out.println(
-                        "Borrando cursos de " + categoria.toUpperCase()
-                                        + " y nivel "
-                                        + nivel);
+            "Borrando cursos de " + categoria.toUpperCase()
+            + " y nivel "
+            + nivel);
         borrados = plataforma.borrarCursosDe(categoria, nivel);
         System.out.println("Borrados " + " = " + borrados.toString() + "\n");
         System.out.println("------------------\n");
         System.out.println(
-                        "Después de borrar ....");
+            "Después de borrar ....");
         plataforma.escribir();
 
     }
